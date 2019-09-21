@@ -1,4 +1,4 @@
-from .mapper import mapper, np
+from Object_Files.mapper import mapper, np
 # import random
 
 class operator:
@@ -11,13 +11,27 @@ class operator:
         self.mapping.insert_feature(position=position)
         array1 = np.insert(array1, position, value1)
         array2 = np.insert(array2, position, value2)
+        return array1,array2
 
     def delete_feature(self, position=0, array1 = [], array2 = []):
         self.mapping.delete_feature(position=position)
         array1 = np.delete(array1, position)
         array2 = np.delete(array2, position)
-
         return array1, array2
+
+    def batch_insert_feature(self,batch_positions=[],array1=[],array2=[],batch_value1=0,batch_value2=0):
+        self.mapping.batch_insert_feature(batch_positions=batch_positions)
+        for i in range(len(batch_positions)):
+            array1 = np.insert(array1, batch_positions[i], batch_value1[i])
+            array2 = np.insert(array2, batch_positions[i],batch_value2[i])
+        return array1,array2
+
+    def batch_delete_feature(self,batch_positions=[],array1=[],array2=[]):
+        self.mapping.batch_delete_feature(batch_positions=batch_positions)
+        for i in range(len(batch_positions)):
+            array1 = np.delete(array1, batch_positions[i])
+            array2 = np.delete(array2, batch_positions[i])
+        return array1,array2
 
     def array_normalization(self, input_array):
         array_norm = np.linalg.norm(input_array)

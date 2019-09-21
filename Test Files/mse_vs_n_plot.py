@@ -1,4 +1,5 @@
-from insertion_deletion import operator, np
+from Object_Files.mapper import mapper, np
+from Object_Files.basic_operator import operator
 import matplotlib.pyplot as plt
 
 def sample_error(N, M):
@@ -13,6 +14,7 @@ def sample_error(N, M):
 
         average_sample_error+=((inner_product1-inner_product2)**2)
 
+    
     average_sample_error/=sample_size
     average_sample_error = average_sample_error**0.5
     

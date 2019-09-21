@@ -15,31 +15,41 @@ class mapper:
         #print("Initializing...\n", "Bits:", self.bits, "\nMap:", self.map)
 
     def insert_feature(self, position=0):
-        self.input_dimension += 1
-        self.bits = np.insert(self.bits, position, (random.randint(0,1)-0.5)*2)
-        self.map = np.insert(self.map, position, random.randint(0,self.output_dimension-1))
+        if position < self.input_dimension:
+            self.input_dimension += 1
+            self.bits = np.insert(self.bits, position, (random.randint(0,1)-0.5)*2)
+            self.map = np.insert(self.map, position, random.randint(0,self.output_dimension-1))
+        else :
+            print("Feature position is incorrect !")
         #print("Inserting New Feature at position:", position)
         #print("Bits:", self.bits)
         #print("Map:", self.map)
 
     def delete_feature(self, position=0):
-        self.input_dimension -= 1
-
-        beta = self.map[position]
-        self.bits = np.delete(self.bits, position)
-        self.map = np.delete(self.map, position)
-
-        alpha = random.randint(0, self.input_dimension-1)
-        while self.map[alpha] == beta:
-             alpha = random.randint(0, self.input_dimension-1)
-            
-        self.bits[alpha] = (random.randint(0,1)-0.5)*2
-        self.map[alpha] = beta
-
+        if position < self.input_dimension:
+            self.input_dimension -= 1
+            beta = self.map[position]
+            self.bits = np.delete(self.bits, position)
+            self.map = np.delete(self.map, position)
+            alpha = random.randint(0, self.input_dimension-1)
+            while self.map[alpha] == beta:
+                alpha = random.randint(0, self.input_dimension-1)
+            self.bits[alpha] = (random.randint(0,1)-0.5)*2
+            self.map[alpha] = beta
+        else :
+            print("Feature position is incorrect !")
         #print("Deleted Index:", position)
         #print("Maping Changed for position:", alpha)
         #print("Bits:", self.bits)
         #print("Map:", self.map)
+
+    def batch_insert_feature(self,batch_positions=[]):
+        for i in range(len(batch_positions)):
+            self.insert_feature(position=batch_positions[i])
+
+    def batch_delete_feature(self,batch_positions=[]):
+        for i in range(len(batch_positions)):
+            self.delete_feature(position=batch_positions[i])
 
     def dimension_reduction(self, input_array):
         output_array = np.zeros(self.output_dimension, dtype=float)

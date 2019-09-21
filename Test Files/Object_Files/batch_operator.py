@@ -1,4 +1,4 @@
-from .mapper import mapper, np
+from mapper import mapper, np
 from basic_operator import operator
 # import random
 
@@ -18,38 +18,16 @@ class batch_operator:
         for i in range(batch_position.size):
             self.operator.delete_feature(position=batch_position[i], array1 = batch_array1[i], array2 = batch_array2[i])
 
+    def batch_inner_product(self, batch_array1=[], batch_array2=[]):
+        results = []
+        for i in range(len(batch_array1)):
+            result_1, result_2 = self.operator.inner_product(batch_array1[i],batch_array2[i])
+            results.append(result_1,result_2)
+        return results
 
-    def array_normalization(self, input_array):
-        array_norm = np.linalg.norm(input_array)
-        result = np.zeros(input_array.size, dtype=float)
-        for i in range(input_array.size):
-            result[i] = (1.0*input_array[i])/array_norm
+def main():
+    operator = batch_operator()
 
-        return result
+if __name__ == '__main__':
+    main()
 
-    def batch_inner_product(self, input_array1, input_array2):
-
-        for i in range(batch_array1.)
-
-
-        input_array1 = self.array_normalization(input_array1)
-        input_array2 = self.array_normalization(input_array2)
-
-        output_array1 = self.mapping.dimension_reduction(input_array1)
-        output_array2 = self.mapping.dimension_reduction(input_array2)
-
-        #print("Output1", output_array1)
-        #print("Output2", output_array2)
-
-        result1, result2 = 0, 0
-        
-        for i, j in zip(input_array1, input_array2):
-            result1+=(i*j)
-
-        for i, j in zip(output_array1, output_array2):
-            result2+=(i*j)
-
-        #print("Input Inner Product:", result1)
-        #print("Output Inner Product:", result2)
-
-        return result1, result2
