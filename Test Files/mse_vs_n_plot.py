@@ -1,4 +1,4 @@
-from inner_product import operator, np
+from insertion_deletion import operator, np
 import matplotlib.pyplot as plt
 
 def sample_error(N, M):
