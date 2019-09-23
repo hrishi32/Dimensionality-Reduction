@@ -1,10 +1,13 @@
 from Object_Files.mapper import mapper, np
+from Object_Files.mapper2 import mapper as mapper2
 # import random
 
 class operator:
-    def __init__(self, input_dim=50, output_dim = 15):
-        self.mapping = mapper(input_dim=input_dim, out_dim=output_dim)
-       
+    def __init__(self, input_dim=50, output_dim = 15,mapping_scheme=1):
+        if mapping_scheme == 1:
+            self.mapping = mapper(input_dim=input_dim, out_dim=output_dim)
+        elif mapping_scheme == 2:
+            self.mapping = mapper2(input_dim=input_dim, out_dim=output_dim)
 
 
     def insert_feature(self, position=0, array1 = [], array2 = [], value1 = 0, value2 = 0):
