@@ -38,6 +38,7 @@ class operator:
 
     def array_normalization(self, input_array):
         array_norm = np.linalg.norm(input_array)
+        print ("array norm:",array_norm)
         result = np.zeros(input_array.size, dtype=float)
         for i in range(input_array.size):
             result[i] = (1.0*input_array[i])/array_norm
@@ -45,8 +46,11 @@ class operator:
         return result
 
     def inner_product(self, input_array1, input_array2):
-        input_array1 = self.array_normalization(input_array1)
-        input_array2 = self.array_normalization(input_array2)
+        # input_array1 = self.array_normalization(input_array1)
+        # input_array2 = self.array_normalization(input_array2)
+
+        # print ("norm array1 :",input_array1)
+        # print ("norm array2 :",input_array2)
 
         output_array1 = self.mapping.dimension_reduction(input_array1)
         output_array2 = self.mapping.dimension_reduction(input_array2)
