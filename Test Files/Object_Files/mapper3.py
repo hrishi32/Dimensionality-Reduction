@@ -3,6 +3,7 @@ import random
 
 class mapper:
     def __init__(self, input_dim = 50, out_dim = 15):
+        print("You are in Mapper 3!")
         self.input_dimension = input_dim
         self.output_dimension = out_dim
         self.bits = np.random.randint(-1, high= 1, size= input_dim)
@@ -93,7 +94,7 @@ class mapper:
         # print ("start")
         while i < old_dim:
 
-            print (i,flags[i])
+            # print (i,flags[i])
             if flags[i] == 1 and last_insertion == 0 :
                 self.insert_feature(i+factor)
                 factor+=1
@@ -122,7 +123,7 @@ class mapper:
         # print ("start")
         while i < old_dim:
 
-            print (i,flags[i])
+            # print (i,flags[i])
             if flags[i] == 1 and last_deletion == 0 :
                 self.delete_feature(i-factor)
                 factor+=1
