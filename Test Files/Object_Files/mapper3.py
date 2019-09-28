@@ -24,7 +24,7 @@ class mapper:
             self.map[i][alpha] = 1
             # self.feature_counter[alpha].append(i)
         print ("Mapping generated")
-        self.get_mapping_info()
+        # self.get_mapping_info()
         # print ("Mapping :",self.map)
         # print ("Feature :",self.feature_counter)
 

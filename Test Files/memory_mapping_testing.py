@@ -43,7 +43,7 @@ def get_feature_deletion_results(Input_dimension ,Output_dimension ,array1,array
 
 	batch_error = []
 	sample_size = Input_dimension/100
-	reduced_input_dim = Input_dimension/3
+	reduced_input_dim = Input_dimension/2
 	demo_operator = operator(input_dim=Input_dimension, output_dim=Output_dimension, mapping_scheme=mapping_scheme)
 	batch_inner_product1 = []
 	batch_inner_product2 = []
@@ -73,8 +73,8 @@ def get_feature_deletion_results(Input_dimension ,Output_dimension ,array1,array
 def main():
 	alpha = random.randint(10,100)
 	print ("* Alpha (Max value of any attribute) of dataset:",alpha)
-	N = 5000
-	M = 250
+	N = 2000
+	M = 100
 	print ("* Input Dimension of Dataset:",N)
 	print ("* Output (compressed) Dimension of Dataset:",M)
 

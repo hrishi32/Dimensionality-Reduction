@@ -108,46 +108,86 @@ def get_feature_deletion_results(Input_dimension ,Output_dimension ,array1,array
 
 	return batch_error,batch_inner_product1,batch_inner_product2,array1,array2
 
+def get_inner_product_results(array1, array2, input_dimension, output_dimension):
+	i = 10
+	avg_inner_product1, avg_inner_product2 = 0, 0
+	while i > 0:
+		demo_operator = operator(input_dim=input_dimension, output_dim=output_dimension, mapping_scheme = 3)
+		inner_product1, inner_product2 = demo_operator.inner_product(array1, array2)
+
+		avg_inner_product1+=inner_product1
+		avg_inner_product2+=inner_product2
+
+		i-=1
+	
+	avg_inner_product1/=10
+	avg_inner_product2/=10
+
+	return avg_inner_product1, avg_inner_product2
+		
+
 
 def main():
 
 	data_array = load_data()
-	N = data_array[0].size
-	M = 1000
-	print ("* Input Dimension of Dataset:",N)
-	print ("* Output (compressed) Dimension of Dataset:",M)
-	alpha = 1
+	i=10
+	inner_products1, inner_products2 = [], []
+	errors = []
+	while i > 0:
+		N = data_array[0].size
+		M = 50*(11-i)
+		print ("* Input Dimension of Dataset:",N)
+		print ("* Output (compressed) Dimension of Dataset:",M)
+		alpha = 1
 
-	arr1 = data_array[0]
-	arr2 = data_array[1]
+		arr1 = data_array[0]
+		arr2 = data_array[1]
 
-	print ("* Selected array (1) from Dataset:",arr1)
-	print ("* Selected array (2) from Dataset:",arr2)
+		print ("* Selected array (1) from Dataset:",arr1)
+		print ("* Selected array (2) from Dataset:",arr2)
 
-	# norm_arr_1 = array_normalization(arr1)
-	# norm_arr_2 = array_normalization(arr2)
+		# norm_arr_1 = array_normalization(arr1)
+		# norm_arr_2 = array_normalization(arr2)
 
-	norm_arr_1 = arr1
-	norm_arr_2 = arr2
+		norm_arr_1 = arr1
+		norm_arr_2 = arr2
 
-	print ("* Normalized array (1):",norm_arr_1)
-	print ("* Normalized array (2):",norm_arr_2)
+		print ("* Normalized array (1):",norm_arr_1)
+		print ("* Normalized array (2):",norm_arr_2)
 
-	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=3,max_value=alpha)
+		ip1, ip2 = get_inner_product_results(norm_arr_1, norm_arr_2, N, M)
 
-	plt.plot(range(len(batch_error)), batch_error, label = "Error Without Compensation")
-	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 Without Compensation")
-	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 Without Compensation")
+		inner_products1.append(ip1)
+		inner_products2.append(ip2)
 
-	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=4,max_value=alpha)
+		errors.append(abs(ip1-ip2))
 
-	# print(batch_error,batch_inner_product1,batch_inner_product2,array1,array2)
+		i-=1
 
-	plt.plot(range(len(batch_error)), batch_error, label = "Error With Compensation")
-	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 With Compensation")
-	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 With Compensation")
+	plt.plot(range(10), inner_products1, label="Inner Product 1")
+	plt.plot(range(10), inner_products2, label = "Inner Product 2")
+	plt.plot(range(10), errors, label = "Errors")
 	plt.legend()
+
 	plt.show()
+	
+
+
+	# batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=3,max_value=alpha)
+
+	# plt.plot(range(len(batch_error)), batch_error, label = "Error Without Compensation")
+	# plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 Without Compensation")
+	# plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 Without Compensation")
+
+	# batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=4,max_value=alpha)
+
+	# # print(batch_error,batch_inner_product1,batch_inner_product2,array1,array2)
+
+	# plt.plot(range(len(batch_error)), batch_error, label = "Error With Compensation")
+	# plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 With Compensation")
+	# plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 With Compensation")
+	# plt.legend()
+	# plt.show()
 
 	
 

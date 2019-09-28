@@ -123,7 +123,7 @@ class operator:
 
     def array_normalization(self, input_array):
         array_norm = np.linalg.norm(input_array)
-        print ("array norm:",array_norm)
+        # print ("array norm:",array_norm)
         result = np.zeros(input_array.size, dtype=float)
         for i in range(input_array.size):
             result[i] = (1.0*input_array[i])/array_norm
