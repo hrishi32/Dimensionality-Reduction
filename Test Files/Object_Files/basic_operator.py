@@ -131,8 +131,8 @@ class operator:
         return result
 
     def inner_product(self, input_array1, input_array2):
-        # input_array1 = self.array_normalization(input_array1)
-        # input_array2 = self.array_normalization(input_array2)
+        input_array1 = self.array_normalization(input_array1)
+        input_array2 = self.array_normalization(input_array2)
 
         # print ("norm array1 :",input_array1)
         # print ("norm array2 :",input_array2)
@@ -158,6 +158,9 @@ class operator:
 
     def get_feature_counter(self):
         return self.mapping.get_feature_counter()
+
+    def get_feature_count(self):
+        return self.mapping.get_feature_count()
 
 def main():
     arr1 = np.random.randint(0, 10, size=5)

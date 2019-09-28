@@ -24,6 +24,7 @@ class mapper:
             self.map[i][alpha] = 1
             # self.feature_counter[alpha].append(i)
         print ("Mapping generated")
+        self.get_mapping_info()
         # print ("Mapping :",self.map)
         # print ("Feature :",self.feature_counter)
 
@@ -52,7 +53,7 @@ class mapper:
         # print("feature_counter :",self.feature_counter)
 
     def delete_feature(self, position=0):
-        print ("Pos:",position)
+        # print ("Pos:",position)
         if position < self.input_dimension:
             # beta=0
             # for i in range(len(self.map[position])):
@@ -75,7 +76,7 @@ class mapper:
 
         else :
             print("Feature position is incorrect !")
-        print("Deleted Index:", position)
+        # print("Deleted Index:", position)
         # print("Maping Changed for position:", alpha)
         # print("Bits:", self.bits)
         # print("Map:", self.map)
@@ -138,6 +139,8 @@ class mapper:
                 last_deletion = 0
             
             i+=1
+
+        # print (self.get_mapping_info())
 
 
         # for i in range(len(batch_positions)):
