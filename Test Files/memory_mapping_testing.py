@@ -3,6 +3,9 @@ from Object_Files.basic_operator import operator
 import matplotlib.pyplot as plt
 import random
 
+mapping  = mapper(2000,500)
+default_bits = mapping.bits
+default_maps = mapping.map
 
 def array_normalization(input_array):
     array_norm = np.linalg.norm(input_array)
@@ -16,7 +19,7 @@ def array_normalization(input_array):
 
 def get_adversarial_positions(demo_operator, batch_feature_size):
 	feature_counter = demo_operator.get_feature_counter()
-	# print ("Originl feature counter:",feature_counter)
+	print ("Originl feature counter:",demo_operator.get_feature_count())
 	batch_positions = []
 	alpha_map = np.zeros(len(feature_counter))
 	while len(batch_positions) < batch_feature_size:
@@ -43,8 +46,10 @@ def get_feature_deletion_results(Input_dimension ,Output_dimension ,array1,array
 
 	batch_error = []
 	sample_size = Input_dimension/100
-	reduced_input_dim = Input_dimension/3
+	reduced_input_dim = Input_dimension/10
 	demo_operator = operator(input_dim=Input_dimension, output_dim=Output_dimension, mapping_scheme=mapping_scheme)
+	demo_operator.mapping.bits = default_bits
+	demo_operator.mapping.map = default_maps
 	batch_inner_product1 = []
 	batch_inner_product2 = []
 	while Input_dimension >= reduced_input_dim:
@@ -71,10 +76,12 @@ def get_feature_deletion_results(Input_dimension ,Output_dimension ,array1,array
 	return batch_error,batch_inner_product1,batch_inner_product2,array1,array2
 
 def main():
+	print(default_bits)
+	print(default_maps)
 	alpha = random.randint(10,100)
 	print ("* Alpha (Max value of any attribute) of dataset:",alpha)
-	N = 5000
-	M = 250
+	N = 2000
+	M = 500
 	print ("* Input Dimension of Dataset:",N)
 	print ("* Output (compressed) Dimension of Dataset:",M)
 
@@ -95,17 +102,17 @@ def main():
 
 	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=3,max_value=alpha)
 
-	plt.plot(range(len(batch_error)), batch_error, label = "Error Without Compensation")
-	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 Without Compensation")
-	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 Without Compensation")
+	plt.plot(range(len(batch_error)), batch_error, label = "MSE w/o Comp.")
+	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "Orig. IP w/o Comp.")
+	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "Red. IP w/o Comp.")
 
 	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=4,max_value=alpha)
 
 	# print(batch_error,batch_inner_product1,batch_inner_product2,array1,array2)
 
-	plt.plot(range(len(batch_error)), batch_error, label = "Error With Compensation")
-	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 With Compensation")
-	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 With Compensation")
+	plt.plot(range(len(batch_error)), batch_error, label = "MSE with Comp.")
+	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "Orig. IP with Comp")
+	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "Red. IP with Comp.")
 	plt.legend()
 	plt.show()
 

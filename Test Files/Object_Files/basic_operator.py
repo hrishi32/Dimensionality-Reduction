@@ -3,6 +3,8 @@ import numpy as np
 from Object_Files.mapper2 import mapper as mapper2
 from Object_Files.mapper3 import mapper as mapper3
 from Object_Files.mapper4 import mapper as mapper4
+from Object_Files.mapper5 import mapper as mapper5
+from Object_Files.mapper6 import mapper as mapper6
 # import random
 
 class operator:
@@ -15,6 +17,10 @@ class operator:
             self.mapping = mapper3(input_dim=input_dim, out_dim=output_dim)
         elif mapping_scheme == 4:
             self.mapping = mapper4(input_dim=input_dim, out_dim=output_dim)
+        elif mapping_scheme == 5:
+            self.mapping = mapper5(input_dim=input_dim, out_dim=output_dim)
+        elif mapping_scheme == 6:
+            self.mapping = mapper6(input_dim=input_dim, out_dim=output_dim)
 
 
     def insert_feature(self, position=0, array1 = [], array2 = [], value1 = 0, value2 = 0):
@@ -117,6 +123,7 @@ class operator:
         
         
         self.mapping.batch_delete_feature(batch_positions=batch_positions)
+        print(self.get_feature_count())
 
         
         return array1,array2

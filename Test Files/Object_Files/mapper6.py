@@ -3,7 +3,7 @@ import random
 
 class mapper:
     def __init__(self, input_dim = 50, out_dim = 15):
-        print("You are in Mapper 3!")
+        print ("You ae using mapper 4.")
         self.input_dimension = input_dim
         self.output_dimension = out_dim
         self.bits = np.random.randint(-1, high= 1, size= input_dim)
@@ -14,17 +14,16 @@ class mapper:
             if self.bits[i] == 0:
                 self.bits[i] = 1
 
-        self.map = np.zeros((input_dim,out_dim),dtype=int)
+        self.map = np.zeros(input_dim,dtype=int)
         # self.feature_counter = []
         # for i in range(out_dim):
         #     self.feature_counter.append([])
 
         for i in range(input_dim):
             alpha = random.randint(0,out_dim-1)
-            self.map[i][alpha] = 1
+            self.map[i] = alpha
             # self.feature_counter[alpha].append(i)
         print ("Mapping generated")
-        # self.get_mapping_info()
         # print ("Mapping :",self.map)
         # print ("Feature :",self.feature_counter)
 
@@ -36,9 +35,7 @@ class mapper:
             self.input_dimension += 1
             self.bits = np.insert(self.bits, position, (random.randint(0,1)-0.5)*2)
             alpha = random.randint(0,self.output_dimension-1)
-            new_feature_vector = np.zeros((self.output_dimension),dtype=int)
-            new_feature_vector[alpha]=1
-            self.map = np.insert(self.map, position,new_feature_vector,axis=0)
+            self.map = np.insert(self.map, position,alpha,axis=0)
             # print (self.map)
             # updated_feature_counter_array = []
             # for i in range(self.input_dimension):
@@ -53,18 +50,25 @@ class mapper:
         # print("feature_counter :",self.feature_counter)
 
     def delete_feature(self, position=0):
-        # print ("Pos:",position)
+        # print ("position to be deleted:",position)
         if position < self.input_dimension:
-            # beta=0
-            # for i in range(len(self.map[position])):
-            #     if self.map[position][i] == 1:
-            #         beta = i
-            #         break
+            beta=self.map[position]
+            # print ("Copressed feature is non-uniform:",beta)
             # print ("beta:",beta)
+            alpha = random.randint(0,self.input_dimension-1)
+            count = 0
+            while self.map[alpha] == beta:
+                alpha = random.randint(0,self.input_dimension-1)
+                if count > 10 :
+                    break
+                count += 1
+            # print ("mapping from :",alpha,"is compensated to:",beta)
+            self.map[alpha] = beta
             self.input_dimension -= 1
             self.bits = np.delete(self.bits, position)
             self.map = np.delete(self.map, position,axis=0)
-
+            
+            
             # updated_feature_counter_array = []
             # for i in range(self.input_dimension):
             #     if self.map[i][beta] == 1:
@@ -80,7 +84,7 @@ class mapper:
         # print("Maping Changed for position:", alpha)
         # print("Bits:", self.bits)
         # print("Map:", self.map)
-        # print("feature_counter :",self.feature_counter)
+        # print("Update feature_counter :",self.get_feature_counter())
 
     def batch_insert_feature(self,batch_positions=[]):
         flags = np.zeros(self.input_dimension)
@@ -121,10 +125,10 @@ class mapper:
         factor = 0
         old_dim = self.input_dimension
         last_deletion = 0
-        # print ("start")
+        # print ("starting deletion")
         while i < old_dim:
 
-            # print (i,flags[i])
+            # print ("-",i,flags[i])
             if flags[i] == 1 and last_deletion == 0 :
                 self.delete_feature(i-factor)
                 factor+=1
@@ -140,8 +144,6 @@ class mapper:
             
             i+=1
 
-        # print (self.get_mapping_info())
-
 
         # for i in range(len(batch_positions)):
         #     self.delete_feature(position=batch_positions[i])
@@ -152,10 +154,12 @@ class mapper:
         # for i in range(self.input_dimension):
         #     if self.map[i] != -1:
         #         output_array[self.map[i]] += (self.bits[i])*input_array[i]
-        x = np.multiply(self.bits, input_array)
-        x = x.transpose()
+        output_array = np.zeros(self.output_dimension, dtype=float)
 
-        return np.matmul(x, self.map).transpose()
+        for i in range(self.input_dimension):
+            output_array[self.map[i]] += (self.bits[i])*input_array[i]
+
+        return output_array
 
 
         # return output_array
@@ -187,14 +191,11 @@ class mapper:
         # print("Input D")
         # print(self.map)
         for i in range(self.input_dimension):
-            for j in range(self.output_dimension):
-                if(self.map[i][j] == 1):
-                    feature_count[j].append(i)
-                    # print("i:", i, "j:", j)
-                    break
+            feature_count[self.map[i]].append(i)
 
         # print (feature_count)
         return feature_count
+
 
     def get_mapping_info(self):
         print ("Input Features:",self.input_dimension)
@@ -210,11 +211,11 @@ class mapper:
 
 def main():
     # #print (np.random.randint(0,high=1,size=50))
-    demomap = mapper(input_dim=6,out_dim=2)
+    demomap = mapper(input_dim=7,out_dim=4)
     demomap.get_mapping_info()
-    arr1 = np.random.randint(0, 10, 6)
+    arr1 = np.random.randint(0, 10, 7)
     print("Original Array:", arr1)
-    print(demomap.dimension_reduction(arr1))
+    print("Reduced array:",demomap.dimension_reduction(arr1))
 
 
     # demomap.get_mapping_info()
@@ -222,9 +223,9 @@ def main():
     # # demomap.insert_feature()
     # # demomap.insert_feature()
     # # demomap.insert_feature()
-    # # demomap.delete_feature(position=3)
+    
     # # demomap.insert_feature()
-    demomap.batch_delete_feature([1,2,4,5])
+    demomap.batch_delete_feature([1,3,4])
     # print (demomap.get_feature_count())
     demomap.get_mapping_info()
     # temp = np.random.randint(-256, 256, demomap.input_dimension)

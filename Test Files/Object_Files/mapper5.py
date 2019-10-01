@@ -14,14 +14,14 @@ class mapper:
             if self.bits[i] == 0:
                 self.bits[i] = 1
 
-        self.map = np.zeros((input_dim,out_dim),dtype=int)
+        self.map = np.zeros(input_dim,dtype=int)
         # self.feature_counter = []
         # for i in range(out_dim):
         #     self.feature_counter.append([])
 
         for i in range(input_dim):
             alpha = random.randint(0,out_dim-1)
-            self.map[i][alpha] = 1
+            self.map[i] = alpha
             # self.feature_counter[alpha].append(i)
         print ("Mapping generated")
         # self.get_mapping_info()
@@ -36,9 +36,7 @@ class mapper:
             self.input_dimension += 1
             self.bits = np.insert(self.bits, position, (random.randint(0,1)-0.5)*2)
             alpha = random.randint(0,self.output_dimension-1)
-            new_feature_vector = np.zeros((self.output_dimension),dtype=int)
-            new_feature_vector[alpha]=1
-            self.map = np.insert(self.map, position,new_feature_vector,axis=0)
+            self.map = np.insert(self.map, position,alpha,axis=0)
             # print (self.map)
             # updated_feature_counter_array = []
             # for i in range(self.input_dimension):
@@ -152,10 +150,12 @@ class mapper:
         # for i in range(self.input_dimension):
         #     if self.map[i] != -1:
         #         output_array[self.map[i]] += (self.bits[i])*input_array[i]
-        x = np.multiply(self.bits, input_array)
-        x = x.transpose()
+        output_array = np.zeros(self.output_dimension, dtype=float)
 
-        return np.matmul(x, self.map).transpose()
+        for i in range(self.input_dimension):
+            output_array[self.map[i]] += (self.bits[i])*input_array[i]
+
+        return output_array
 
 
         # return output_array
@@ -187,11 +187,7 @@ class mapper:
         # print("Input D")
         # print(self.map)
         for i in range(self.input_dimension):
-            for j in range(self.output_dimension):
-                if(self.map[i][j] == 1):
-                    feature_count[j].append(i)
-                    # print("i:", i, "j:", j)
-                    break
+            feature_count[self.map[i]].append(i)
 
         # print (feature_count)
         return feature_count
@@ -210,9 +206,9 @@ class mapper:
 
 def main():
     # #print (np.random.randint(0,high=1,size=50))
-    demomap = mapper(input_dim=6,out_dim=2)
+    demomap = mapper(input_dim=7,out_dim=3)
     demomap.get_mapping_info()
-    arr1 = np.random.randint(0, 10, 6)
+    arr1 = np.random.randint(0, 10, 7)
     print("Original Array:", arr1)
     print(demomap.dimension_reduction(arr1))
 
@@ -222,9 +218,11 @@ def main():
     # # demomap.insert_feature()
     # # demomap.insert_feature()
     # # demomap.insert_feature()
-    # # demomap.delete_feature(position=3)
+    # demomap.delete_feature(position=3)
+    # demomap.get_mapping_info()
+    # demomap.delete_feature(position=4)
     # # demomap.insert_feature()
-    demomap.batch_delete_feature([1,2,4,5])
+    demomap.batch_delete_feature([1,3,4])
     # print (demomap.get_feature_count())
     demomap.get_mapping_info()
     # temp = np.random.randint(-256, 256, demomap.input_dimension)

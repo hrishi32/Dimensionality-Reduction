@@ -1,11 +1,13 @@
 from os.path import abspath, exists
 import numpy as np
-from Object_Files.mapper3 import mapper
+from Object_Files.mapper5 import mapper
 from Object_Files.basic_operator import operator
 import matplotlib.pyplot as plt
 import random
 
-
+mapping = mapper(28102,2000)
+default_bits = mapping.bits
+default_maps = mapping.map
 
 def array_normalization(input_array):
     array_norm = np.linalg.norm(input_array)
@@ -81,8 +83,10 @@ def get_feature_deletion_results(Input_dimension ,Output_dimension ,array1,array
 
 	batch_error = []
 	sample_size = Input_dimension/100
-	reduced_input_dim = Input_dimension/2
+	reduced_input_dim = Input_dimension/1.5
 	demo_operator = operator(input_dim=Input_dimension, output_dim=Output_dimension, mapping_scheme=mapping_scheme)
+	demo_operator.mapping.bits = default_bits
+	demo_operator.mapping.map = default_maps
 	batch_inner_product1 = []
 	batch_inner_product2 = []
 	while Input_dimension >= reduced_input_dim:
@@ -113,7 +117,7 @@ def main():
 
 	data_array = load_data()
 	N = data_array[0].size
-	M = 1000
+	M = 2000
 	print ("* Input Dimension of Dataset:",N)
 	print ("* Output (compressed) Dimension of Dataset:",M)
 	alpha = 1
@@ -133,13 +137,13 @@ def main():
 	print ("* Normalized array (1):",norm_arr_1)
 	print ("* Normalized array (2):",norm_arr_2)
 
-	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=3,max_value=alpha)
+	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=5,max_value=alpha)
 
 	plt.plot(range(len(batch_error)), batch_error, label = "Error Without Compensation")
 	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 Without Compensation")
 	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 Without Compensation")
 
-	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=4,max_value=alpha)
+	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=6,max_value=alpha)
 
 	# print(batch_error,batch_inner_product1,batch_inner_product2,array1,array2)
 
