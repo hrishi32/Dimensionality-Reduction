@@ -76,28 +76,7 @@ class mapper:
                     break
             self.map[alpha][beta] = 1
 
-            beta = alpha
-
-            for i in range(len(self.map[position])):
-                if self.map[position][i] == 1:
-                    # print ("Debug to be examined...")
-                    beta = i
-                    break
-            # print ("Copressed feature is non-uniform:",beta)
-            # print ("beta:",beta)
-            alpha = random.randint(0,self.input_dimension-1)
-            count = 0
-            while self.map[alpha][beta] == 1:
-                alpha = random.randint(0,self.input_dimension-1)
-                if count > 10 :
-                    break
-                count += 1
-            # print ("mapping from :",alpha,"is compensated to:",beta)
-            for i in range(self.map[alpha].size):
-                if self.map[alpha][i] == 1:
-                    self.map[alpha][i] = 0
-                    break
-            self.map[alpha][beta] = 1
+            
 
             self.input_dimension -= 1
             self.bits = np.delete(self.bits, position)

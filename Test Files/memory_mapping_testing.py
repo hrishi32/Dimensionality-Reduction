@@ -1,9 +1,9 @@
-from Object_Files.mapper3 import mapper,np
+from Object_Files.mapper5 import mapper,np
 from Object_Files.basic_operator import operator
 import matplotlib.pyplot as plt
 import random
 
-mapping  = mapper(2000,500)
+mapping  = mapper(50000,3000)
 default_bits = mapping.bits
 default_maps = mapping.map
 
@@ -80,8 +80,8 @@ def main():
 	print(default_maps)
 	alpha = random.randint(10,100)
 	print ("* Alpha (Max value of any attribute) of dataset:",alpha)
-	N = 2000
-	M = 500
+	N = 50000
+	M = 3000
 	print ("* Input Dimension of Dataset:",N)
 	print ("* Output (compressed) Dimension of Dataset:",M)
 
@@ -100,19 +100,27 @@ def main():
 	print ("* Normalized array (1):",norm_arr_1)
 	print ("* Normalized array (2):",norm_arr_2)
 
-	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=3,max_value=alpha)
+	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=5,max_value=alpha)
 
 	plt.plot(range(len(batch_error)), batch_error, label = "MSE w/o Comp.")
 	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "Orig. IP w/o Comp.")
 	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "Red. IP w/o Comp.")
 
-	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=4,max_value=alpha)
+	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=6,max_value=alpha)
 
 	# print(batch_error,batch_inner_product1,batch_inner_product2,array1,array2)
 
 	plt.plot(range(len(batch_error)), batch_error, label = "MSE with Comp.")
-	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "Orig. IP with Comp")
-	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "Red. IP with Comp.")
+	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "Orig. IP with 2 step Comp")
+	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "Red. IP with 2 step Comp.")
+
+	# batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=7,max_value=alpha)
+
+	# # print(batch_error,batch_inner_product1,batch_inner_product2,array1,array2)
+
+	# plt.plot(range(len(batch_error)), batch_error, label = "MSE with Comp.")
+	# plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "Orig. IP with 1 step Comp")
+	# plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "Red. IP with 1 step Comp.")
 	plt.legend()
 	plt.show()
 

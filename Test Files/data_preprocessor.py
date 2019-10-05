@@ -114,46 +114,87 @@ def get_feature_deletion_results(Input_dimension ,Output_dimension ,array1,array
 
 
 def main():
+	count = 1
+	avg_batch_error_a = []
+	avg_batch_error_b = []
+	avg_inner_product1_a = []
+	avg_inner_product2_a = []
+	avg_inner_product1_b = []
+	avg_inner_product2_b = []
+	while count <= 100:
 
-	data_array = load_data()
-	N = data_array[0].size
-	M = 2000
-	print ("* Input Dimension of Dataset:",N)
-	print ("* Output (compressed) Dimension of Dataset:",M)
-	alpha = 1
+		data_array = load_data()
+		N = data_array[0].size
+		M = 2000
+		# print ("* Input Dimension of Dataset:",N)
+		# print ("* Output (compressed) Dimension of Dataset:",M)
+		alpha = 1
 
-	arr1 = data_array[0]
-	arr2 = data_array[1]
+		arr1 = data_array[count-1]
+		arr2 = data_array[count]
 
-	print ("* Selected array (1) from Dataset:",arr1)
-	print ("* Selected array (2) from Dataset:",arr2)
+		# print ("* Selected array (1) from Dataset:",arr1)
+		# print ("* Selected array (2) from Dataset:",arr2)
 
-	# norm_arr_1 = array_normalization(arr1)
-	# norm_arr_2 = array_normalization(arr2)
+		# norm_arr_1 = array_normalization(arr1)
+		# norm_arr_2 = array_normalization(arr2)
 
-	norm_arr_1 = arr1
-	norm_arr_2 = arr2
+		norm_arr_1 = arr1
+		norm_arr_2 = arr2
 
-	print ("* Normalized array (1):",norm_arr_1)
-	print ("* Normalized array (2):",norm_arr_2)
+		# print ("* Normalized array (1):",norm_arr_1)
+		# print ("* Normalized array (2):",norm_arr_2)
 
-	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=5,max_value=alpha)
+		batch_error_a,batch_inner_product1_a,batch_inner_product2_a,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=5,max_value=alpha)
 
-	plt.plot(range(len(batch_error)), batch_error, label = "Error Without Compensation")
-	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 Without Compensation")
-	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 Without Compensation")
+		# plt.plot(range(len(batch_error)), batch_error, label = "Error Without Compensation")
+		# plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 Without Compensation")
+		# plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 Without Compensation")
 
-	batch_error,batch_inner_product1,batch_inner_product2,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=6,max_value=alpha)
+		batch_error_b,batch_inner_product1_b,batch_inner_product2_b,_,_ = get_feature_deletion_results(Input_dimension = N,Output_dimension = M,array1=norm_arr_1,array2=norm_arr_2,mapping_scheme=6,max_value=alpha)
 
-	# print(batch_error,batch_inner_product1,batch_inner_product2,array1,array2)
+		# print(batch_error,batch_inner_product1,batch_inner_product2,array1,array2)
 
-	plt.plot(range(len(batch_error)), batch_error, label = "Error With Compensation")
-	plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 With Compensation")
-	plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 With Compensation")
+		# plt.plot(range(len(batch_error)), batch_error, label = "Error With Compensation")
+		# plt.plot(range(len(batch_inner_product1)), batch_inner_product1, label = "IP1 With Compensation")
+		# plt.plot(range(len(batch_inner_product2)), batch_inner_product2, label = "IP2 With Compensation")
+		# plt.legend()
+		# plt.show()
+		if count == 1:
+			avg_batch_error_a = batch_error_a
+			avg_batch_error_b = batch_error_b
+			avg_inner_product1_a = batch_inner_product1_a
+			avg_inner_product2_a = batch_inner_product2_a
+			avg_inner_product1_b = batch_inner_product1_b
+			avg_inner_product2_b = batch_inner_product2_b
+
+		else :
+			for i in range(len(batch_error_a)):
+				avg_batch_error_a[i] += batch_error_a[i]
+				avg_batch_error_b[i] += batch_error_b[i]
+				avg_inner_product1_a[i] += batch_inner_product1_a[i]
+				avg_inner_product2_a[i] += batch_inner_product2_a[i]
+				avg_inner_product1_b[i] = batch_inner_product1_b[i]
+				avg_inner_product2_b[i] = batch_inner_product2_b[i]
+		count += 1
+
+	for i in range(len(avg_batch_error_a)):
+		avg_batch_error_a[i] /= 100
+		avg_batch_error_b[i] /= 100
+		avg_inner_product1_a[i] /= 100
+		avg_inner_product2_a[i] /= 100
+		avg_inner_product1_b[i] /= 100
+		avg_inner_product2_b[i] /= 100
+
+	plt.plot(range(len(avg_batch_error_a)), avg_batch_error_a, label = "Error Without Compensation")
+	plt.plot(range(len(avg_inner_product1_a)), avg_inner_product1_a, label = "IP1 Without Compensation")
+	plt.plot(range(len(avg_inner_product2_a)), avg_inner_product2_a, label = "IP2 Without Compensation")
+
+	plt.plot(range(len(avg_batch_error_b)), avg_batch_error_b, label = "Error With Compensation")
+	plt.plot(range(len(avg_inner_product1_b)), avg_inner_product1_b, label = "IP1 With Compensation")
+	plt.plot(range(len(avg_inner_product2_b)), avg_inner_product2_b, label = "IP2 With Compensation")
 	plt.legend()
 	plt.show()
-
-	
 
 if __name__ == '__main__':
 	main()
