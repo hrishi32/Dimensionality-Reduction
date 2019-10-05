@@ -46,7 +46,11 @@ def get_feature_deletion_results(Input_dimension ,Output_dimension ,array1,array
 
 	batch_error = []
 	sample_size = Input_dimension/100
+<<<<<<< HEAD
 	reduced_input_dim = Input_dimension/10
+=======
+	reduced_input_dim = Input_dimension/2
+>>>>>>> c1baf7dafdaf57e4983d7eb7c9d456fad83b174b
 	demo_operator = operator(input_dim=Input_dimension, output_dim=Output_dimension, mapping_scheme=mapping_scheme)
 	demo_operator.mapping.bits = default_bits
 	demo_operator.mapping.map = default_maps
@@ -80,8 +84,13 @@ def main():
 	print(default_maps)
 	alpha = random.randint(10,100)
 	print ("* Alpha (Max value of any attribute) of dataset:",alpha)
+<<<<<<< HEAD
 	N = 50000
 	M = 3000
+=======
+	N = 2000
+	M = 100
+>>>>>>> c1baf7dafdaf57e4983d7eb7c9d456fad83b174b
 	print ("* Input Dimension of Dataset:",N)
 	print ("* Output (compressed) Dimension of Dataset:",M)
 
